@@ -21,7 +21,7 @@ public class ShouldNotHaveDuplicatesTests
             .With<ShouldNotHaveDuplicates>()
             .Validate(sc);
 
-        results.Single().Message.Should().Be("ImplementationType \"Tests.TestService\" is registered for ServiceType \"Tests.ITestService\" 2 times.");
+        results.Single().Message.Should().Be("ImplementationType 'Tests.TestService' is registered for ServiceType 'Tests.ITestService' 2 times.");
     }
     
     [TestMethod]

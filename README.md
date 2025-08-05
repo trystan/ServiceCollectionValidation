@@ -11,7 +11,8 @@ var services = new ServiceCollection();
 
 // hundreds of lines of registration
 
-var results = DependencyInjectionValidation.Validators.Default.Validate(services);
+var validator = DependencyInjectionValidation.Validators.Default;
+var results = validator.Validate(services);
 if (results.Any())
 {
   foreach (var result in results)
@@ -27,9 +28,13 @@ if (results.Any())
 ```csharp
 public void ValidateSetup()
 {
-  var services = new Setup().ServiceCollection;
+  var services = new ServiceCollection();
 
-  var results = DependencyInjectionValidation.Validators.Default.Validate(services);
+  new Setup()
+    .AddServices(services);
+
+  var validator = DependencyInjectionValidation.Validators.Default;
+  var results = validator.Validate(services);
   if (results.Any())
   {
     foreach (var result in results)
@@ -43,14 +48,20 @@ public void ValidateSetup()
 
 ## Write new rules
 
+You can write your own rules. This one is already defined, but not used by default.
+
 ```csharp
 public class ShouldBeInAlphabeticalOrder : IRule
 {
+    private Result _invalid = new Result { Message = "Services should be registered in alphabetical order." };
+
     public IEnumerable<Result> Validate(ServiceCollection services)
     {
-        return services.Any()
+        var types = services.Select(s => s.ServiceType);
+        var isGood = types.Zip(types.OrderBy(t => t.Name)).All(pair => pair.First == pair.Second);
+        return isGood
             ? Enumerable.Empty<Result>()
-            : new List<Result> { new Result { Message = "ServiceCollection should not be empty." } };
+            : [_invalid];
     }
 }
 ```
@@ -69,7 +80,7 @@ var results = validator.Validate(services);
 or add to an existing one
 
 ```csharp
-var validator = DependencyInjectionValidation.Validators.Default
+var validator = Validators.Default
   .With<ShouldBeInAlphabeticalOrder>();
 
 var results = validator.Validate(services);
@@ -77,19 +88,38 @@ var results = validator.Validate(services);
 
 ## Create your own default ruleset
 
-You may want to reuse the same validation rules across projects. Easy.
+You may want to define what rules to use in one place and reuse them, possibly across projects. Here's an example of what that might look like.
 
 ```csharp
 namespace MyCompany.Common;
 
 public static class ValidatorsExtensions
 {
-  public static Validator MyCompanyValidator(this Validators validators) => validators.Default.With<ShouldBeInAlphabeticalOrder>();
+  public static Validator MyCompanyValidator(this Validators validators)
+  {
+    return validators.Default
+        .With<ShouldBeInAlphabeticalOrder>()
+        .With<ShouldBuildAllServices>()
+        .With<MyCompany.Common.ShouldFollowOurNamingConventions>()
+        .With<MyCompany.Common.ShouldHaveFewerThan50Methods>()
+        // Note: we need this because of bug #1234
+        .Without<ShouldNotHaveDuplicates>();
+  }
 }
 ```
 
-Then use it in any projects that reference your project that has `MyCompany.Common`.
+Then use it in any projects that references your project that has that extension method.
 
 ```csharp
-DependencyInjectionValidation.Validators.MyCompanyValidator().Validate(services);
+Validators.MyCompanyValidator().Validate(services);
+```
+
+The `Default` validator is defined like this
+
+```csharp
+public Validator Default = new Validator()
+    .With<ShouldNotBeEmpty>()
+    .With<ShouldNotHaveDuplicates>()
+    .With<ShouldNotCaptureScope>()
+    .With<ShouldIncludeAllDependencies>();
 ```
