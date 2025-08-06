@@ -27,6 +27,8 @@ public interface IRule
 /// </remarks>
 public class Validators
 {
+    public static Validators Predefined { get; } = new Validators();
+
     public Validator Empty => new Validator();
 
     public Validator Default = new Validator()
@@ -41,31 +43,36 @@ public class Validators
 /// </summary>
 /// <remarks>
 /// In addition to modifying the list of Rules on the Validator itself, you can use the <c>With()</c> and
-/// <c>Without()</c> methods to return an updated copy. Validators can themselves be comosed using <c>With()</c>
+/// <c>Without()</c> methods to return an updated copy. Validators can themselves be composed using <c>With()</c>
 /// and <c>Without()</c>.
 /// </remarks>
 public class Validator
 {
+    [Obsolete("Use Validators.Predefined instead")]
     public static Validators Predefined { get; } = new Validators();
 
     public List<IRule> Rules { get; private init;  } = new List<IRule>();
 
+    public Validator() { }
+
+    public Validator(IEnumerable<IRule> rules)
+    {
+        Rules.AddRange(rules);
+    }
+
+    public Validator With(params IRule[] rules) => new Validator(this.Rules.Concat(rules));
+
     public Validator With(Validator other) => With(other.Rules.ToArray());
 
-    public Validator With(params IRule[] rules) => new Validator { Rules = Rules.Concat(rules).ToList() };
+    public Validator With<T>()
+        where T : IRule, new() => With(new T());
 
-    public Validator With<T>() where T : IRule, new() => new Validator { Rules = Rules.Append(new T()).ToList() };
+    public Validator Without(params IRule[] rules) => new Validator(this.Rules.Where(r => !rules.Contains(r)));
 
     public Validator Without(Validator other) => Without(other.Rules.ToArray());
 
-    public Validator Without(params IRule[] rules) => new Validator { Rules = Rules.Where(r => !rules.Contains(r)).ToList() };
-
     public Validator Without<T>()
-        where T : IRule, new()
-    {
-        var t = new T().GetType();
-        return new Validator { Rules = Rules.Where(r => r.GetType() != t).ToList() };
-    }
+        where T : IRule, new() => new Validator(this.Rules.Where(r => r.GetType() != typeof(T)));
 
     public IEnumerable<Result> Validate(ServiceCollection services)
     {

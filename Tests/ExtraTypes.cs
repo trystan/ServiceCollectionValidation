@@ -6,6 +6,9 @@ public interface ITestServiceA { }
 public class TestServiceA : ITestServiceA { }
 public interface ITestServiceB { }
 public class TestServiceB : ITestServiceB { }
-public class TestParent(ITestServiceA childA) : ITestService { }
-public class TestParentWithOptionalChild(ITestServiceA? childA = null) : ITestService { }
-public class TestParentWithDefaultChild(int childA = 4) : ITestService { }
+
+#pragma warning disable CS9113 // Parameter is unread.
+public class TestParent(ITestServiceA ChildA) : ITestService { }
+public class TestParentWithOptionalChild(ITestServiceA? ChildA = null) : ITestService { }
+public class TestParentWithDefaultChild(int SomeCompileTimeConstant = 8) : ITestService { }
+#pragma warning restore CS9113 // Parameter is unread.
