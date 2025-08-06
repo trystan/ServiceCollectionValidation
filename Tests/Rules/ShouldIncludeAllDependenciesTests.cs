@@ -1,11 +1,12 @@
 
 using AwesomeAssertions;
 using DependencyInjectionValidation;
+using DependencyInjectionValidation.Rules;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Tests;
+namespace Tests.Rules;
 
 [TestClass]
 public class ShouldIncludeAllDependenciesTests

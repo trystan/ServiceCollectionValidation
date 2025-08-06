@@ -1,6 +1,7 @@
 
 using AwesomeAssertions;
 using DependencyInjectionValidation;
+using DependencyInjectionValidation.Rules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests;
@@ -32,14 +33,20 @@ public class ValidatorTests
     }
 
     [TestMethod]
-    public void ValidatorsAreRulesToo()
+    public void ValidatorsAreComposableToo()
     {
+        var empty = new Validator();
         var first = new Validator()
             .With<ShouldBeInAlphabeticalOrder>();
         var second = new Validator()
             .With(first);
+        var third = second
+            .Without(first);
 
         second.Rules.Should().BeEquivalentTo(first.Rules);
         second.Rules.Should().NotBeSameAs(first.Rules);
+
+        third.Rules.Should().BeEquivalentTo(empty.Rules);
+        third.Rules.Should().NotBeSameAs(empty.Rules);
     }
 }
