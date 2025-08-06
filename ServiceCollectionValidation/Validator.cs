@@ -1,7 +1,7 @@
-﻿using DependencyInjectionValidation.Rules;
+﻿using ServiceCollectionValidation.Rules;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DependencyInjectionValidation;
+namespace ServiceCollectionValidation;
 
 /// <summary>
 /// The result of a validation.

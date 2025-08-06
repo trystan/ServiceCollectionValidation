@@ -1,7 +1,7 @@
 
 using AwesomeAssertions;
-using DependencyInjectionValidation;
-using DependencyInjectionValidation.Rules;
+using ServiceCollectionValidation;
+using ServiceCollectionValidation.Rules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests;

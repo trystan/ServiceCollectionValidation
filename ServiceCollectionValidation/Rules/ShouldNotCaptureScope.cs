@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DependencyInjectionValidation.Rules;
+namespace ServiceCollectionValidation.Rules;
 
 /// <summary>
 /// Validate that there are no Singleton services that depend on Scoped services.

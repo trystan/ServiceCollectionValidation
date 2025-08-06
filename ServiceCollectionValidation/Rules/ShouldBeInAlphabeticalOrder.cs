@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DependencyInjectionValidation.Rules;
+namespace ServiceCollectionValidation.Rules;
 
 /// <summary>
 /// Validate that all ServiceTypes are registered in alphabetical order.

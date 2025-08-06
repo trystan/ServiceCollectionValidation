@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjectionValidation", "DependencyInjectionValidation\DependencyInjectionValidation.csproj", "{9445DDBE-4547-441A-9E59-399613D28421}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceCollectionValidation", "ServiceCollectionValidation\ServiceCollectionValidation.csproj", "{9445DDBE-4547-441A-9E59-399613D28421}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EFDD0566-094B-44FC-AD00-7AC7FCAE4E7F}"
 EndProject

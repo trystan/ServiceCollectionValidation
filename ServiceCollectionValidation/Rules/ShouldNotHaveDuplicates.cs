@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DependencyInjectionValidation.Rules;
+namespace ServiceCollectionValidation.Rules;
 
 /// <summary>
 /// Validate that no <c>ServiceType</c> and <c>ImplementationType</c> combo are registered more than once.

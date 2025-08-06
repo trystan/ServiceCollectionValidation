@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DependencyInjectionValidation.Rules;
+namespace ServiceCollectionValidation.Rules;
 
 /// <summary>
 /// Create a ServiceProvider and validate that all ServiceTypes can actually be created.

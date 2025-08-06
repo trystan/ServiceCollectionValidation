@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DependencyInjectionValidation.Rules;
+namespace ServiceCollectionValidation.Rules;
 
 /// <summary>
 /// Validate that all parameters of all constructors of all registered ServiceTypes are registered.

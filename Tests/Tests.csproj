@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DependencyInjectionValidation\DependencyInjectionValidation.csproj" />
+    <ProjectReference Include="..\ServiceCollectionValidation\ServiceCollectionValidation.csproj" />
   </ItemGroup>
 
 </Project>

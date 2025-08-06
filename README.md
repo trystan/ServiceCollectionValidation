@@ -1,4 +1,4 @@
-# DependencyInjectionValidation
+# ServiceCollectionValidation
 
 Exactly what it sounds like, validate your service collection.
 
@@ -11,7 +11,7 @@ var services = new ServiceCollection();
 
 // hundreds of lines of registration
 
-var validator = DependencyInjectionValidation.Validators.Default;
+var validator = ServiceCollectionValidation.Validators.Default;
 var results = validator.Validate(services);
 if (results.Any())
 {
@@ -33,7 +33,7 @@ public void ValidateSetup()
   new Setup()
     .AddServices(services);
 
-  var validator = DependencyInjectionValidation.Validators.Default;
+  var validator = ServiceCollectionValidation.Validators.Default;
   var results = validator.Validate(services);
   if (results.Any())
   {
