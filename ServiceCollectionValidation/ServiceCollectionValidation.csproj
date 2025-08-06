@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ServiceCollectionValidation</Title>
     <Authors>TrystanS</Authors>
-    <Version>1.0.0</Version>
+    <Version>1.1.2</Version>
     <Description>Validate your ServiceCollection.</Description>
     <Copyright>2025</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
