@@ -10,7 +10,7 @@ namespace ServiceCollectionValidation.Rules;
 /// </remarks>
 public class ShouldBuildAllServices : IRule
 {
-    public IEnumerable<Result> Validate(ServiceCollection services)
+    public IEnumerable<Result> Validate(IServiceCollection services)
     {
         var sp = services.BuildServiceProvider();
         using var scope = sp.CreateScope();

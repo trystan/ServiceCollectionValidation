@@ -10,7 +10,7 @@ namespace ServiceCollectionValidation.Rules;
 /// </remarks>
 public class ShouldNotCaptureScope: IRule
 {
-    public IEnumerable<Result> Validate(ServiceCollection services)
+    public IEnumerable<Result> Validate(IServiceCollection services)
     {
         var singletons = services.Where(s => s.Lifetime == ServiceLifetime.Singleton).ToList();
         var scopes = services.Where(s => s.Lifetime == ServiceLifetime.Scoped).ToList();

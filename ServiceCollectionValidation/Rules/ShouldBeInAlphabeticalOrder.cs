@@ -10,7 +10,7 @@ namespace ServiceCollectionValidation.Rules;
 /// </remarks>
 public class ShouldBeInAlphabeticalOrder : IRule
 {
-    public IEnumerable<Result> Validate(ServiceCollection services)
+    public IEnumerable<Result> Validate(IServiceCollection services)
     {
         var types = services.Select(s => s.ServiceType);
         var firstOutOfOrder = types.Zip(types.OrderBy(t => t.Name)).FirstOrDefault(pair => pair.First != pair.Second);

@@ -10,7 +10,7 @@ namespace ServiceCollectionValidation.Rules;
 /// </remarks>
 public class ShouldNotHaveDuplicates : IRule
 {
-    public IEnumerable<Result> Validate(ServiceCollection services)
+    public IEnumerable<Result> Validate(IServiceCollection services)
     {
         return services
             .GroupBy(s => (s.ServiceType, s.ImplementationType))

@@ -12,11 +12,11 @@ public class Result
 }
 
 /// <summary>
-/// A validation rule that can be applied to a <c>ServiceCollection</c>.
+/// A validation rule that can be applied to a <c>IServiceCollection</c>.
 /// </summary>
 public interface IRule
 {
-    IEnumerable<Result> Validate(ServiceCollection services);
+    IEnumerable<Result> Validate(IServiceCollection services);
 }
 
 /// <summary>
@@ -39,7 +39,7 @@ public class Validators
 }
 
 /// <summary>
-/// A Validator takes a <c>ServiceCollection</c> and applies a list of rules and returns any validation messages.
+/// A Validator takes a <c>IServiceCollection</c> and applies a list of rules and returns any validation messages.
 /// </summary>
 /// <remarks>
 /// In addition to modifying the list of Rules on the Validator itself, you can use the <c>With()</c> and
@@ -74,7 +74,7 @@ public class Validator
     public Validator Without<T>()
         where T : IRule, new() => new Validator(this.Rules.Where(r => r.GetType() != typeof(T)));
 
-    public IEnumerable<Result> Validate(ServiceCollection services)
+    public IEnumerable<Result> Validate(IServiceCollection services)
     {
         return Rules.SelectMany(r => r.Validate(services));
     }
