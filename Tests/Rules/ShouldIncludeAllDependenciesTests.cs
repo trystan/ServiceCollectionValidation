@@ -103,4 +103,18 @@ public class ShouldIncludeAllDependenciesTests
 
         results.Should().BeEmpty();
     }
+
+    [TestMethod]
+    public void WhenUsingGenericsLikeILogger_ReturnsNoMessages()
+    {
+        var sc = new ServiceCollection();
+        sc.AddSingleton(typeof(ITestGeneric<>), typeof(TestGeneric<>));
+        sc.AddSingleton<ITestService, GenericUser>();
+
+        var results = new Validator()
+            .With<ShouldIncludeAllDependencies>()
+            .Validate(sc);
+
+        results.Should().BeEmpty();
+    }
 }

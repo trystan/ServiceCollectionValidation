@@ -24,7 +24,7 @@ public class ShouldIncludeAllDependencies: IRule
                 {
                     if (parameter.IsOptional) continue;
 
-                    var child = services.FirstOrDefault(s => s.ServiceType == parameter.ParameterType);
+                    var child = services.FirstOrDefault(s => IsMatch(s.ServiceType, parameter.ParameterType));
                     if (child == null)
                     {
                         results.Add(new Result { Message = $"ServiceType '{parent.ImplementationType.FullName}' requires service '{parameter.ParameterType.FullName}' but none are registered." });
@@ -34,5 +34,12 @@ public class ShouldIncludeAllDependencies: IRule
         }
 
         return results;
+    }
+
+    private bool IsMatch(Type lookingFor, Type lookingAt)
+    {
+        if (lookingFor == lookingAt) return true;
+        if (lookingFor.IsGenericType && lookingAt.IsGenericType && lookingFor.GetGenericTypeDefinition() == lookingAt.GetGenericTypeDefinition()) return true;
+        return false;
     }
 }

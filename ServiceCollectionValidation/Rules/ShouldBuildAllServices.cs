@@ -18,6 +18,8 @@ public class ShouldBuildAllServices : IRule
 
         foreach (var service in services)
         {
+            if (service.ServiceType.ContainsGenericParameters) continue;
+
             try
             {
                 scope.ServiceProvider.GetService(service.ServiceType);

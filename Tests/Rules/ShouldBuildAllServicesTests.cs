@@ -116,4 +116,17 @@ public class ShouldBuildAllServicesTests
 
         results.Should().BeEmpty();
     }
+
+    [TestMethod]
+    public void WhenUsingGenericsLikeILogger_ReturnsNoMessages()
+    {
+        var sc = new ServiceCollection();
+        sc.AddSingleton(typeof(ITestGeneric<>), typeof(TestGeneric<>));
+
+        var results = new Validator()
+            .With<ShouldBuildAllServices>()
+            .Validate(sc);
+
+        results.Should().BeEmpty();
+    }
 }
