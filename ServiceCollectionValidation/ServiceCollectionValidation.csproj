@@ -7,7 +7,7 @@
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ServiceCollectionValidation</Title>
-    <Authors>TrystanS</Authors>
+    <Authors>Trystan Spangler</Authors>
     <Version>1.1.4</Version>
     <Description>Validate your ServiceCollection.</Description>
     <Copyright>2025</Copyright>
@@ -16,7 +16,7 @@
     <RepositoryUrl>https://github.com/trystan/ServiceCollectionValidation</RepositoryUrl>
     <PackageTags>DI; dependency injection; validation; ServiceCollection</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <IncludeSymbols>False</IncludeSymbols>
+    <IncludeSymbols>True</IncludeSymbols>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
