@@ -3,12 +3,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceCollectionValidation;
 
+public enum Severity
+{
+    Warning,
+    Error
+}
+
 /// <summary>
 /// The result of a validation.
 /// </summary>
 public class Result
 {
-    required public string Message {  get; set; }
+    public Severity Severity { get; init; } = Severity.Error;
+    required public string Message {  get; init; }
 }
 
 /// <summary>

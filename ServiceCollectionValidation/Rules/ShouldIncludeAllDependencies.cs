@@ -14,20 +14,27 @@ public class ShouldIncludeAllDependencies: IRule
     {
         var results = new List<Result>();
 
-        foreach (var parent in services)
+        foreach (var descriptor in services)
         {
-            if (parent.ImplementationType == null) continue;
+            if (descriptor.ImplementationType == null) continue;
 
-            foreach (var constructor in parent.ImplementationType.GetConstructors())
+            foreach (var constructor in descriptor.ImplementationType.GetConstructors())
             {
                 foreach (var parameter in constructor.GetParameters())
                 {
                     if (parameter.IsOptional) continue;
 
-                    var child = services.FirstOrDefault(s => IsMatch(s.ServiceType, parameter.ParameterType));
-                    if (child == null)
+                    // TODO: works, but seems like it could be better
+                    if (parameter.ParameterType.Name == "IEnumerable`1") continue;
+
+                    var isFulfilled = services.Any(s => IsMatch(parameter.ParameterType, s.ServiceType));
+                    if (!isFulfilled)
                     {
-                        results.Add(new Result { Message = $"ServiceType '{parent.ImplementationType.FullName}' requires service '{parameter.ParameterType.FullName}' but none are registered." });
+                        var name = parameter.ParameterType.FullName ?? parameter.ParameterType.Name;
+                        results.Add(new Result {
+                            Severity = Severity.Warning,
+                            Message = $"ServiceType '{descriptor.ImplementationType.FullName}' requires service '{name} {parameter.Name}' but none are registered."
+                        });
                     }
                 }
             }

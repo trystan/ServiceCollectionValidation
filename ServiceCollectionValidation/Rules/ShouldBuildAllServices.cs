@@ -18,6 +18,7 @@ public class ShouldBuildAllServices : IRule
 
         foreach (var service in services)
         {
+            // TODO
             if (service.ServiceType.ContainsGenericParameters) continue;
 
             try

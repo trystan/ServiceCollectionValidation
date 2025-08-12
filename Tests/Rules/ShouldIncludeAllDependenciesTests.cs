@@ -21,7 +21,7 @@ public class ShouldIncludeAllDependenciesTests
             .With<ShouldIncludeAllDependencies>()
             .Validate(sc);
 
-        results.Single().Message.Should().Be("ServiceType 'Tests.TestParent' requires service 'Tests.ITestServiceA' but none are registered.");
+        results.Single().Message.Should().Be("ServiceType 'Tests.TestParent' requires service 'Tests.ITestServiceA ChildA' but none are registered.");
     }
 
     [TestMethod]
