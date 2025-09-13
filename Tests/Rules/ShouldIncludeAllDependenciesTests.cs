@@ -79,6 +79,19 @@ public class ShouldIncludeAllDependenciesTests
     }
 
     [TestMethod]
+    public void WhenAnyConstructorCanBeUsed_ReturnsNoMessages()
+    {
+        var sc = new ServiceCollection();
+        sc.AddSingleton<ITestService, TestParentWithTwoConstructors>();
+
+        var results = new Validator()
+            .With<ShouldIncludeAllDependencies>()
+            .Validate(sc);
+
+        results.Should().BeEmpty();
+    }
+
+    [TestMethod]
     public void WhenImplementationFactoryIsRegistered_ReturnsNoMessages()
     {
         var sc = new ServiceCollection();

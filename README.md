@@ -15,11 +15,11 @@ var validator = Validators.Predefined.Default;
 var results = validator.Validate(services);
 if (results.Any())
 {
-  foreach (var result in results)
-  {
-    Console.WriteLine(result.Message);
-  }
-  throw new InvalidOperationException("ServiceCollection is not set up correctly.");
+    foreach (var result in results)
+    {
+        Console.WriteLine(result.Message);
+    }
+    throw new InvalidOperationException("ServiceCollection is not set up correctly.");
 }
 ```
 
@@ -28,20 +28,25 @@ if (results.Any())
 ```csharp
 public void ValidateSetup()
 {
-  var services = new ServiceCollection();
+    IServiceCollection services = null!;
 
-  new Setup()
-    .AddServices(services);
+    Host
+        .CreateDefaultBuilder()
+        .ConfigureServices(config =>
+        {
+            services = config;
+        })
+        .Build();
 
   var validator = Validators.Predefined.Default;
   var results = validator.Validate(services);
   if (results.Any())
   {
-    foreach (var result in results)
-    {
-      Console.WriteLine(result.Message);
-    }
-    Assert.Fail();
+      foreach (var result in results)
+      {
+          Console.WriteLine(result.Message);
+      }
+      Assert.Fail();
   }
 }
 ```
@@ -104,17 +109,17 @@ namespace MyCompany.Common;
 
 public static class ValidatorsExtensions
 {
-  public static Validator MyCompanyValidator(this Validators predefs)
-  {
-    return predefs.Default
-        .With<ShouldBeInAlphabeticalOrder>()
-        .With<ShouldBuildAllServices>()
-        .With<MyCompany.Common.ShouldFollowOurNamingConventions>()
-        .With<MyCompany.Common.ShouldHaveFewerThan50Methods>()
-        .With(new MyCompany.Infrastructure.CommonValidator(strict: false));
-        // Note: we need this because of bug #1234
-        .Without<ShouldNotHaveDuplicates>()
-  }
+    public static Validator MyCompanyValidator(this Validators predefs)
+    {
+        return predefs.Default
+            .With<ShouldBeInAlphabeticalOrder>()
+            .With<ShouldBuildAllServices>()
+            .With<MyCompany.Common.ShouldFollowOurNamingConventions>()
+            .With<MyCompany.Common.ShouldHaveFewerThan50Methods>()
+            .With(new MyCompany.Infrastructure.CommonValidator(strict: false));
+            // Note: we need this because of bug #1234
+            .Without<ShouldNotHaveDuplicates>()
+    }
 }
 ```
 
@@ -150,9 +155,13 @@ This is not included in the `Default` validator.
 
 ### ShouldBuildAllServices
 
+Validates that all services can actually be built.
+
 This is not included in the `Default` validator.
 
 ### ShouldIncludeAllDependencies
+
+Validates all dependencies are registered.
 
 This is included in the `Default` validator.
 
@@ -162,8 +171,12 @@ This is included in the `Default` validator.
 
 ### ShouldNotCaptureScope
 
+Validates that no services with Scope lifetime are injected into services with the Singleton lifetime.
+
 This is included in the `Default` validator.
 
 ### ShouldNotHaveDuplicates
+
+Validates the exact same implementation and service pair aren't registered more than once.
 
 This is included in the `Default` validator.
