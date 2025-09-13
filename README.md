@@ -81,20 +81,14 @@ validator.Rules.Add(new ShouldBeInAlphabeticalOrder());
 var results = validator.Validate(services);
 ```
 
-or create one based on an existing one since `With()` and `Without()` create a copy without modifying the original.
+Or you can create a validator by composing rules and validators using `With()` and `Without()`.
 
 ```csharp
 var validator = Validators.Predefined.Default
-  .With<ShouldBeInAlphabeticalOrder>();
-
-var results = validator.Validate(services);
-```
-
-or add an instance if you don't want to rely on a default constructor
-
-```csharp
-var validator = Validators.Predefined.Default
+  .With<ShouldAlwaysImplementAnInterface>()
   .With(new ShouldBeConfiguredFor(CurrentEnvironment));
+  .Without<ShouldBeInAlphabeticalOrder>()
+  .With(new SuperAdvancedValidator(strict: true));
 
 var results = validator.Validate(services);
 ```
@@ -139,29 +133,23 @@ public Validator Default = new Validator()
     .With<ShouldIncludeAllDependencies>();
 ```
 
-As shown in an earlier example, you can even compose validators themselves. They're "flattened" "so only the rules are added or removed.
-
-```csharp
-var validator = Validators.Predefined.MyCompanyValidator()
-  .With(new SuperAdvancedValidator())
-  .Without<ShouldBeInAlphabeticalOrder>();
-```
-
 ## Existing rules
 
 ### ShouldBeInAlphabeticalOrder
+
+Validates types are registererd in alphabeticcal order. Just a silly example.
 
 This is not included in the `Default` validator.
 
 ### ShouldBuildAllServices
 
-Validates that all services can actually be built.
+Validates that all services can actually be built - by actually building them.
 
-This is not included in the `Default` validator.
+This is not included in the `Default` validator since who knows what side effects building everything might have.
 
 ### ShouldIncludeAllDependencies
 
-Validates all dependencies are registered.
+Validates each service has at least one constructor that can be used to instantiate it.
 
 This is included in the `Default` validator.
 

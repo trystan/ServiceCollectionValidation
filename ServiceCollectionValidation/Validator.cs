@@ -55,9 +55,6 @@ public class Validators
 /// </remarks>
 public class Validator
 {
-    [Obsolete("Use Validators.Predefined instead")]
-    public static Validators Predefined { get; } = new Validators();
-
     public List<IRule> Rules { get; private init;  } = new List<IRule>();
 
     public Validator() { }
