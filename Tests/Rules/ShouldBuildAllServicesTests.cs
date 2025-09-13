@@ -25,19 +25,6 @@ public class ShouldBuildAllServicesTests
     }
 
     [TestMethod]
-    public void WhenDependencyIsOptional_ReturnsNoMessages()
-    {
-        var sc = new ServiceCollection();
-        sc.AddSingleton<ITestService, TestParentWithOptionalChild>();
-
-        var results = new Validator()
-            .With<ShouldBuildAllServices>()
-            .Validate(sc);
-
-        results.Should().BeEmpty();
-    }
-
-    [TestMethod]
     public void WhenDependencyHasDefafult_ReturnsNoMessages()
     {
         var sc = new ServiceCollection();

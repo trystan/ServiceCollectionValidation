@@ -3,7 +3,7 @@
 namespace ServiceCollectionValidation.Rules;
 
 /// <summary>
-/// Validate that all parameters of all constructors of all registered ServiceTypes are registered.
+/// Validate that at least one constructor of each registered ServiceTypes can be used to construct it.
 /// </summary>
 /// <remarks>
 /// This is included in the <c>Validator.Predefined.Default</c> validator.
@@ -12,20 +12,13 @@ public class ShouldIncludeAllDependencies: IRule
 {
     public IEnumerable<Result> Validate(IServiceCollection services)
     {
-        var results = new List<Result>();
-
-        foreach (var descriptor in services)
-        {
-            if (descriptor.ImplementationType == null) continue;
-
-            results.AddRange(CheckConstructors(services, descriptor));
-        }
-
-        return results;
+        return services.SelectMany(descriptor => CheckConstructors(services, descriptor));
     }
 
     private List<Result> CheckConstructors(IServiceCollection services, ServiceDescriptor descriptor)
     {
+        if (descriptor.ImplementationType == null) return new List<Result>();
+
         var totalResults = new List<Result>();
 
         foreach (var constructor in descriptor.ImplementationType.GetConstructors())
@@ -34,7 +27,7 @@ public class ShouldIncludeAllDependencies: IRule
 
             foreach (var parameter in constructor.GetParameters())
             {
-                if (parameter.IsOptional) continue;
+                if (parameter.HasDefaultValue) continue;
 
                 // TODO: works, but seems like it could be better
                 if (parameter.ParameterType.Name == "IEnumerable`1") continue;
@@ -45,7 +38,6 @@ public class ShouldIncludeAllDependencies: IRule
                     var name = parameter.ParameterType.FullName ?? parameter.ParameterType.Name;
                     results.Add(new Result
                     {
-                        Severity = Severity.Warning,
                         Message = $"ServiceType '{descriptor.ImplementationType.FullName}' requires service '{name} {parameter.Name}' but none are registered."
                     });
                 }
@@ -66,7 +58,10 @@ public class ShouldIncludeAllDependencies: IRule
     private bool IsMatch(Type lookingFor, Type lookingAt)
     {
         if (lookingFor == lookingAt) return true;
+
+        // Handle ILogger<> style services
         if (lookingFor.IsGenericType && lookingAt.IsGenericType && lookingFor.GetGenericTypeDefinition() == lookingAt.GetGenericTypeDefinition()) return true;
+        
         return false;
     }
 }

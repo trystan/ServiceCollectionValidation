@@ -1,4 +1,6 @@
-﻿namespace Tests;
+﻿using System.Runtime.InteropServices;
+
+namespace Tests;
 
 public interface ITestService { }
 public class TestService : ITestService { }
@@ -13,7 +15,6 @@ public class TestGeneric<T> : ITestGeneric<T> { }
 #pragma warning disable CS9113 // Parameter is unread.
 public class GenericUser(ITestGeneric<GenericUser> example) : ITestService { }
 public class TestParent(ITestServiceA ChildA) : ITestService { }
-public class TestParentWithOptionalChild(ITestServiceA? ChildA = null) : ITestService { }
 public class TestParentWithDefaultChild(int SomeCompileTimeConstant = 8) : ITestService { }
 
 public class TestParentWithTwoConstructors : ITestService
