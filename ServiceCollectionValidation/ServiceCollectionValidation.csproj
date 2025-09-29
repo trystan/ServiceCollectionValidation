@@ -7,8 +7,9 @@
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ServiceCollectionValidation</Title>
+    <Version>1.2.0</Version>
     <Authors>Trystan Spangler</Authors>
-    <Version>1.1.8</Version>
+    <Company></Company>
     <Description>Validate your ServiceCollection.</Description>
     <Copyright>2025</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
@@ -18,6 +19,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <IncludeSymbols>True</IncludeSymbols>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
