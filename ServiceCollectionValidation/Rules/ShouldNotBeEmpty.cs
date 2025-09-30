@@ -6,9 +6,9 @@ namespace ServiceCollectionValidation.Rules;
 /// Validate that at least something is added to the service collection.
 /// </summary>
 /// <remarks>
-/// This is included in the <c>Validator.Predefined.Default</c> validator.
+/// This is included in the <c>Validators.Predefined.Default</c> validator.
 /// </remarks>
-public class ShouldNotBeEmpty : IRule
+public record struct ShouldNotBeEmpty : IRule
 {
     public IEnumerable<Result> Validate(IServiceCollection services)
     {

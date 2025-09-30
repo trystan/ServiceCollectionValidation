@@ -1,9 +1,10 @@
 
 using AwesomeAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceCollectionValidation;
 using ServiceCollectionValidation.Rules;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace Tests.Rules;
@@ -116,5 +117,34 @@ public class ShouldIncludeAllDependenciesTests
             .Validate(sc);
 
         results.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void WhenDependencyIsIServiceProvider_ReturnsNoMessages()
+    {
+        var sc = new ServiceCollection();
+        sc.AddSingleton<ITestService, ServiceProviderUser>();
+
+        var results = new Validator()
+            .With<ShouldIncludeAllDependencies>()
+            .Validate(sc);
+
+        results.Should().BeEmpty("IServiceProvider is available by default even if not registered");
+    }
+
+    [TestMethod]
+    public void WhenDependencyIsIServiceProvider_WhenConfigured_ReturnsMessages()
+    {
+        var sc = new ServiceCollection();
+        sc.AddSingleton<ITestService, ServiceProviderUser>();
+
+        var results = new Validator()
+            .With(new ShouldIncludeAllDependencies(c =>
+            {
+                c.AssumeIServiceProviderIsAvailable = false;
+            }))
+            .Validate(sc);
+
+        results.Single().Message.Should().Be("ServiceType 'Tests.ServiceProviderUser' requires service 'System.IServiceProvider example' but none are registered.");
     }
 }

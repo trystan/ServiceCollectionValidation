@@ -5,6 +5,7 @@ namespace ServiceCollectionValidation;
 
 public enum Severity
 {
+    Information,
     Warning,
     Error
 }
@@ -49,7 +50,7 @@ public class Validators
 /// A Validator takes a <c>IServiceCollection</c> and applies a list of rules and returns any validation messages.
 /// </summary>
 /// <remarks>
-/// In addition to modifying the list of Rules on the Validator itself, you can use the <c>With()</c> and
+/// In addition to modifying the list of Rules on the validator itself, you can use the <c>With()</c> and
 /// <c>Without()</c> methods to return an updated copy. Validators can themselves be composed using <c>With()</c>
 /// and <c>Without()</c>.
 /// </remarks>
@@ -66,7 +67,7 @@ public class Validator
 
     public Validator With(params IRule[] rules) => new Validator(this.Rules.Concat(rules));
 
-    public Validator With(Validator other) => With(other.Rules.ToArray());
+    public Validator With(Validator other) => With(other.Rules.Where(r => !Rules.Contains(r)).ToArray());
 
     public Validator With<T>()
         where T : IRule, new() => With(new T());

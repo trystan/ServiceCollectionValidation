@@ -6,9 +6,9 @@ namespace ServiceCollectionValidation.Rules;
 /// Validate that all ServiceTypes are registered in alphabetical order.
 /// </summary>
 /// <remarks>
-/// This is not included in the <c>Validator.Predefined.Default</c> validator. It's mostly just an example.
+/// This is not included in the <c>Validators.Predefined.Default</c> validator. It's mostly just an example.
 /// </remarks>
-public class ShouldBeInAlphabeticalOrder : IRule
+public record struct ShouldBeInAlphabeticalOrder : IRule
 {
     public IEnumerable<Result> Validate(IServiceCollection services)
     {

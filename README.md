@@ -2,9 +2,9 @@
 
 Exactly what it sounds like, validate your service collection.
 
-## Validate in your Setup.cs
+## Validate in your Startup.cs
 
-In setup:
+In Startup:
 
 ```csharp
 var services = new ServiceCollection();
@@ -26,7 +26,7 @@ if (results.Any())
 ## Validate in your tests
 
 ```csharp
-public void ValidateSetup()
+public void ServiceCollectionShouldBeValid()
 {
     IServiceCollection services = null!;
 
@@ -39,15 +39,10 @@ public void ValidateSetup()
         .Build();
 
   var validator = Validators.Predefined.Default;
+
   var results = validator.Validate(services);
-  if (results.Any())
-  {
-      foreach (var result in results)
-      {
-          Console.WriteLine(result.Message);
-      }
-      Assert.Fail();
-  }
+
+  results.Should().BeEmpty();
 }
 ```
 

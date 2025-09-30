@@ -2,14 +2,69 @@
 
 namespace ServiceCollectionValidation.Rules;
 
+public class ShouldIncludeAllDependenciesOptions : IEquatable<ShouldIncludeAllDependenciesOptions?>
+{
+    /// <summary>
+    /// Assume that <c>IServiceProvider</c> is a valid dependency even if none is in the <c>ServiceCollection</c>.
+    /// </summary>
+    /// <remarks>
+    /// <c>true</c> by default.
+    /// </remarks>
+    public bool AssumeIServiceProviderIsAvailable { get; set; } = true;
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as ShouldIncludeAllDependenciesOptions);
+    }
+
+    public bool Equals(ShouldIncludeAllDependenciesOptions? other)
+    {
+        return other is not null &&
+               AssumeIServiceProviderIsAvailable == other.AssumeIServiceProviderIsAvailable;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(AssumeIServiceProviderIsAvailable);
+    }
+
+    public static bool operator ==(ShouldIncludeAllDependenciesOptions? left, ShouldIncludeAllDependenciesOptions? right)
+    {
+        return EqualityComparer<ShouldIncludeAllDependenciesOptions>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(ShouldIncludeAllDependenciesOptions? left, ShouldIncludeAllDependenciesOptions? right)
+    {
+        return !(left == right);
+    }
+}
+
 /// <summary>
 /// Validate that at least one constructor of each registered ServiceTypes can be used to construct it.
 /// </summary>
 /// <remarks>
-/// This is included in the <c>Validator.Predefined.Default</c> validator.
+/// This is included in the <c>Validators.Predefined.Default</c> validator.
 /// </remarks>
-public class ShouldIncludeAllDependencies: IRule
+public class ShouldIncludeAllDependencies : IRule, IEquatable<ShouldIncludeAllDependencies?>
 {
+    private readonly ShouldIncludeAllDependenciesOptions _options;
+
+    public ShouldIncludeAllDependencies()
+        : this(new ShouldIncludeAllDependenciesOptions())
+    {
+    }
+
+    public ShouldIncludeAllDependencies(ShouldIncludeAllDependenciesOptions options)
+    {
+        _options = options;
+    }
+
+    public ShouldIncludeAllDependencies(Action<ShouldIncludeAllDependenciesOptions> configAction)
+        : this()
+    {
+        configAction(this._options);
+    }
+
     public IEnumerable<Result> Validate(IServiceCollection services)
     {
         return services.SelectMany(descriptor => CheckConstructors(services, descriptor));
@@ -35,6 +90,8 @@ public class ShouldIncludeAllDependencies: IRule
                 var isFulfilled = services.Any(s => IsMatch(parameter.ParameterType, s.ServiceType));
                 if (!isFulfilled)
                 {
+                    if (parameter.ParameterType == typeof(IServiceProvider) && _options.AssumeIServiceProviderIsAvailable) continue;
+
                     var name = parameter.ParameterType.FullName ?? parameter.ParameterType.Name;
                     results.Add(new Result
                     {
@@ -63,5 +120,31 @@ public class ShouldIncludeAllDependencies: IRule
         if (lookingFor.IsGenericType && lookingAt.IsGenericType && lookingFor.GetGenericTypeDefinition() == lookingAt.GetGenericTypeDefinition()) return true;
         
         return false;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as ShouldIncludeAllDependencies);
+    }
+
+    public bool Equals(ShouldIncludeAllDependencies? other)
+    {
+        return other is not null &&
+               _options.Equals(other._options);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_options);
+    }
+
+    public static bool operator ==(ShouldIncludeAllDependencies? left, ShouldIncludeAllDependencies? right)
+    {
+        return EqualityComparer<ShouldIncludeAllDependencies>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(ShouldIncludeAllDependencies? left, ShouldIncludeAllDependencies? right)
+    {
+        return !(left == right);
     }
 }

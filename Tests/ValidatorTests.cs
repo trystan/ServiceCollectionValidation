@@ -49,4 +49,21 @@ public class ValidatorTests
         third.Rules.Should().BeEquivalentTo(empty.Rules);
         third.Rules.Should().NotBeSameAs(empty.Rules);
     }
+
+    [TestMethod]
+    public void ValidatorsDoNotDuplicateRules()
+    {
+        var first = new Validator()
+            .With<ShouldBeInAlphabeticalOrder>()
+            .With<ShouldIncludeAllDependencies>()
+            .With(new ShouldIncludeAllDependencies(new ShouldIncludeAllDependenciesOptions { AssumeIServiceProviderIsAvailable = false }));
+        var second = new Validator()
+            .With<ShouldBeInAlphabeticalOrder>()
+            .With<ShouldIncludeAllDependencies>()
+            .With(new ShouldIncludeAllDependencies(new ShouldIncludeAllDependenciesOptions { AssumeIServiceProviderIsAvailable = false }));
+        var combined = first
+            .With(second);
+
+        combined.Rules.Should().HaveCount(3);
+    }
 }

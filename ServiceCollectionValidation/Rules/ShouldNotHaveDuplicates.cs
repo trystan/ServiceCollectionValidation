@@ -6,9 +6,9 @@ namespace ServiceCollectionValidation.Rules;
 /// Validate that no <c>ServiceType</c> and <c>ImplementationType</c> combo are registered more than once.
 /// </summary>
 /// <remarks>
-/// This is included in the <c>Validator.Predefined.Default</c> validator.
+/// This is included in the <c>Validators.Predefined.Default</c> validator.
 /// </remarks>
-public class ShouldNotHaveDuplicates : IRule
+public record struct ShouldNotHaveDuplicates : IRule
 {
     public IEnumerable<Result> Validate(IServiceCollection services)
     {

@@ -6,9 +6,9 @@ namespace ServiceCollectionValidation.Rules;
 /// Validate that there are no Singleton services that depend on Scoped services.
 /// </summary>
 /// <remarks>
-/// This is included in the <c>Validator.Predefined.Default</c> validator.
+/// This is included in the <c>Validators.Predefined.Default</c> validator.
 /// </remarks>
-public class ShouldNotCaptureScope: IRule
+public record struct ShouldNotCaptureScope : IRule
 {
     public IEnumerable<Result> Validate(IServiceCollection services)
     {

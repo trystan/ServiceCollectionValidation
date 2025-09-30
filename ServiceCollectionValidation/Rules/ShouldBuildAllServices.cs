@@ -6,9 +6,9 @@ namespace ServiceCollectionValidation.Rules;
 /// Create a ServiceProvider and validate that all ServiceTypes can actually be created.
 /// </summary>
 /// <remarks>
-/// This is not included in the <c>Validator.Predefined.Default</c> validator. It may be a good idea, but it may have unwanted side effects.
+/// This is not included in the <c>Validators.Predefined.Default</c> validator. It may be a good idea, but it may have unwanted side effects.
 /// </remarks>
-public class ShouldBuildAllServices : IRule
+public record struct ShouldBuildAllServices : IRule
 {
     public IEnumerable<Result> Validate(IServiceCollection services)
     {
@@ -23,7 +23,7 @@ public class ShouldBuildAllServices : IRule
 
             try
             {
-                scope.ServiceProvider.GetService(service.ServiceType);
+                scope.ServiceProvider.GetRequiredService(service.ServiceType);
             }
             catch (Exception e)
             {
