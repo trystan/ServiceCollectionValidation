@@ -11,7 +11,7 @@
     <FileVersion>$(Version)</FileVersion>
     <Authors>Trystan Spangler</Authors>
     <Company></Company>
-    <Description>AspNetCore rules to validate your ServiceCollection.</Description>
+    <Description>AspNetCore-specific rules to validate your ServiceCollection.</Description>
     <Copyright>2025</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -26,16 +26,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE" Link="LICENSE">
-      <PackagePath>\</PackagePath>
+    <None Include="LICENSE">
       <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\README.md" Link="README.md">
-      <PackagePath>\</PackagePath>
+    <None Include="README.md">
       <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
   </ItemGroup>

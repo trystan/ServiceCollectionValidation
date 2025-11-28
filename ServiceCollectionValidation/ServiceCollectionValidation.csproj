@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,7 +7,7 @@
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ServiceCollectionValidation</Title>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <Authors>Trystan Spangler</Authors>
     <Company></Company>
@@ -26,11 +26,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE">
+    <None Include="LICENSE">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\README.md">
+    <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
@@ -40,5 +40,5 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
   </ItemGroup>
-
+  
 </Project>
