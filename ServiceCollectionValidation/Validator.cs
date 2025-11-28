@@ -1,5 +1,6 @@
 ﻿using ServiceCollectionValidation.Rules;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ServiceCollectionValidation;
 
@@ -22,9 +23,20 @@ public class Result
 /// <summary>
 /// A validation rule that can be applied to a <c>IServiceCollection</c>.
 /// </summary>
+/// <remarks>
+/// If the rule also implements <c>IRunBeforeValidation</c>, then it will be run before validation happens.
+/// </remarks>
 public interface IRule
 {
     IEnumerable<Result> Validate(IServiceCollection services);
+}
+
+/// <summary>
+/// Something that should happen before validation begins. It takes a copy of the original service collection that you can add to.
+/// </summary>
+public interface IRunBeforeValidation : IRule
+{
+    void RunBeforeValidation(IServiceCollection services);
 }
 
 /// <summary>
@@ -81,6 +93,21 @@ public class Validator
 
     public IEnumerable<Result> Validate(IServiceCollection services)
     {
-        return Rules.SelectMany(r => r.Validate(services));
+        // Create a new collection so nothing can modify the original collection.
+        // NOTE: the service descriptors themselves can still be modified, but
+        // you should know you probably should not do that.
+        var newServiceCollection = new ServiceCollection();
+
+        foreach (var service in services)
+        {
+            newServiceCollection.Add(service);
+        }
+
+        foreach (var rule in Rules.OfType<IRunBeforeValidation>())
+        {
+            rule.RunBeforeValidation(newServiceCollection);
+        }
+
+        return Rules.SelectMany(r => r.Validate(newServiceCollection)).ToArray();
     }
 }

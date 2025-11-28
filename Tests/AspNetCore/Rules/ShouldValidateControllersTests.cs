@@ -17,14 +17,47 @@ namespace Tests.AspNetCore.Rules;
 public class ShouldValidateControllersTests
 {
     [TestMethod]
+    public void DetectsTypesWithControllerAttribute()
+    {
+        var controllers = ShouldValidateControllers.GetControllers();
+
+        var expectedController = typeof(TestController);
+
+        controllers.Should().Contain(expectedController);
+    }
+
+    [TestMethod]
+    public void IgnoresTypesWithNonControllerAttribute()
+    {
+        var controllers = ShouldValidateControllers.GetControllers();
+
+        var expectedController = typeof(TestNonController);
+
+        controllers.Should().NotContain(expectedController);
+    }
+
+    [TestMethod]
+    public void DoesNotModifyServiceCollection()
+    {
+        var sc = new ServiceCollection();
+
+        new Validator()
+            .With<ShouldValidateControllers>()
+            .Validate(sc);
+
+        sc.Should().BeEmpty();
+    }
+
+    [TestMethod]
     public void WhenControllerDependencyIsMissing_ReturnsMessage()
     {
         var sc = new ServiceCollection();
 
         var results = new Validator()
             .With<ShouldValidateControllers>()
+            .With<ShouldIncludeAllDependencies>()
             .Validate(sc);
 
-        results.Single().Message.Should().Be("Controller 'Tests.AspNetCore.TestController' requires service 'Tests.Core.ITestService service' but none are registered.");
+        results.Single().Message.Should().Be("ServiceType 'Tests.AspNetCore.TestController' requires service 'Tests.Core.ITestService service' but none are registered.");
     }
 }

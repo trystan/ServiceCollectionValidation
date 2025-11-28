@@ -1,4 +1,5 @@
-﻿using AwesomeAssertions;
+﻿using AspNetCore.Rules;
+using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

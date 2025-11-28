@@ -1,65 +1,56 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using ServiceCollectionValidation;
 
 namespace AspNetCore.Rules;
 
-public class ShouldValidateControllers : IRule
+/// <summary>
+/// This will scan all types in the current <c>AppDomain</c> that have <c>ControllerAttribute</c> but not <c>NonController</c> attribute in their type heirarchy and validate them as though they were in the service collection.
+/// </summary>
+/// <remarks>
+/// This is included in the <c>Validators.Predefined.AspNetCore()</c> validator.
+/// </remarks>
+public class ShouldValidateControllers : IRule, IRunBeforeValidation
 {
     public IEnumerable<Result> Validate(IServiceCollection services)
     {
-        var totalResults = new List<Result>();
-
-        var controllerBase = typeof(ControllerBase);
-
-        var controllers = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(a => a.GetTypes())
-            .Where(t => t.IsAssignableTo(controllerBase));
-
-        foreach (var controller in controllers)
-        {
-            foreach (var constructor in controller.GetConstructors())
-            {
-                var results = new List<Result>();
-
-                foreach (var parameter in constructor.GetParameters())
-                {
-                    if (parameter.HasDefaultValue) continue;
-
-                    // TODO: works, but seems like it could be better
-                    if (parameter.ParameterType.Name == "IEnumerable`1") continue;
-
-                    var isFulfilled = services.Any(s => IsMatch(parameter.ParameterType, s.ServiceType));
-                    if (!isFulfilled)
-                    {
-                        var name = parameter.ParameterType.FullName ?? parameter.ParameterType.Name;
-                        results.Add(new Result
-                        {
-                            Message = $"Controller '{controller.FullName}' requires service '{name} {parameter.Name}' but none are registered."
-                        });
-                    }
-                }
-
-                if (results.Count == 0)
-                {
-                    // We found a good constructor - no need to keep looking.
-                    return results;
-                }
-
-                totalResults.AddRange(results);
-            }
-        }
-
-        return totalResults;
+        return [];
     }
 
-    private bool IsMatch(Type lookingFor, Type lookingAt)
+    public void RunBeforeValidation(IServiceCollection services)
     {
-        if (lookingFor == lookingAt) return true;
+        foreach (var controller in GetControllers())
+        {
+            services.TryAddTransient(controller);
+        }
+    }
 
-        // Handle ILogger<> style services
-        if (lookingFor.IsGenericType && lookingAt.IsGenericType && lookingFor.GetGenericTypeDefinition() == lookingAt.GetGenericTypeDefinition()) return true;
+    public static IEnumerable<Type> GetControllers()
+    {
+        var controllerAttribute = typeof(ControllerAttribute);
+        var nonControllerAttribute = typeof(NonControllerAttribute);
 
-        return false;
+        foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()))
+        {
+            if (type.IsAbstract) continue;
+
+            if (type.IsInterface) continue;
+
+            var doesImplementControllerAttribute = RecursiveAny(type, t => t.CustomAttributes.Any(a => a.AttributeType == controllerAttribute));
+            if (!doesImplementControllerAttribute) continue;
+
+            var shouldIgnore = RecursiveAny(type, t => t.CustomAttributes.Any(a => a.AttributeType == nonControllerAttribute)); ;
+            if (shouldIgnore) continue;
+            
+            yield return type;
+        }
+    }
+
+    private static bool RecursiveAny(Type type, Func<Type, bool> predicate)
+    {
+        if (predicate(type)) return true;
+        if (type.BaseType != null && RecursiveAny(type.BaseType, predicate)) return true;
+        return type.GetInterfaces().Any(i => RecursiveAny(i, predicate));
     }
 }
