@@ -2,6 +2,8 @@
 
 Exactly what it sounds like, validate your service collection.
 
+You can also use [ServiceCollectionValidation.AspNetCore](https://www.nuget.org/packages/ServiceCollectionValidation.AspNetCore) to add more validation for AspNetCore projects.
+
 ## Validate in your Startup.cs
 
 In Startup:

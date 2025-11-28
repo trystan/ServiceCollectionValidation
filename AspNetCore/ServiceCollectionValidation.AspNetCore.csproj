@@ -7,7 +7,7 @@
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ServiceCollectionValidation.AspNetCore</Title>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <FileVersion>$(Version)</FileVersion>
     <Authors>Trystan Spangler</Authors>
     <Company></Company>

@@ -6,7 +6,7 @@ using ServiceCollectionValidation;
 namespace AspNetCore.Rules;
 
 /// <summary>
-/// This will scan all types in the current <c>AppDomain</c> that have <c>ControllerAttribute</c> but not <c>NonController</c> attribute in their type heirarchy and validate them as though they were in the service collection.
+/// This will scan all types in the current <c>AppDomain</c> that have <c>ControllerAttribute</c> but not <c>NonControllerAttribute</c> in their type heirarchy and validate them as though they were in the service collection.
 /// </summary>
 /// <remarks>
 /// This is included in the <c>Validators.Predefined.AspNetCore()</c> validator.

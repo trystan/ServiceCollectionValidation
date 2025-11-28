@@ -14,6 +14,6 @@ Validators.Predefined.AspNetCore().Validate(services);
 
 ### ShouldValidateControllers
 
-Uses reflection to get all types in the current `AppDomain` that derive from `ControllerBase` and verify their dependencies are registered.
+This will scan all types in the current `AppDomain` that have `ControllerAttribute` but not `NonControllerAttribute` in their type heirarchy and validate them as though they were in the service collection.
 
 This is included in the `AspNetCore` validator.
