@@ -7,7 +7,7 @@ using ServiceCollectionValidation;
 using ServiceCollectionValidation.Rules;
 using System.Linq;
 
-namespace Tests.Rules;
+namespace Tests.Core.Rules;
 
 [TestClass]
 public class ShouldIncludeAllDependenciesTests
@@ -22,7 +22,7 @@ public class ShouldIncludeAllDependenciesTests
             .With<ShouldIncludeAllDependencies>()
             .Validate(sc);
 
-        results.Single().Message.Should().Be("ServiceType 'Tests.TestParent' requires service 'Tests.ITestServiceA ChildA' but none are registered.");
+        results.Single().Message.Should().Be("ServiceType 'Tests.Core.TestParent' requires service 'Tests.Core.ITestServiceA ChildA' but none are registered.");
     }
 
     [TestMethod]
@@ -145,6 +145,6 @@ public class ShouldIncludeAllDependenciesTests
             }))
             .Validate(sc);
 
-        results.Single().Message.Should().Be("ServiceType 'Tests.ServiceProviderUser' requires service 'System.IServiceProvider example' but none are registered.");
+        results.Single().Message.Should().Be("ServiceType 'Tests.Core.ServiceProviderUser' requires service 'System.IServiceProvider example' but none are registered.");
     }
 }

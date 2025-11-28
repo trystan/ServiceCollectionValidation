@@ -4,7 +4,7 @@ using ServiceCollectionValidation;
 using ServiceCollectionValidation.Rules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests;
+namespace Tests.Core;
 
 [TestClass]
 public class ValidatorTests

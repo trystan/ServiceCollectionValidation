@@ -6,31 +6,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Tests.Rules;
+namespace Tests.Core.Rules;
 
 [TestClass]
-public class ShouldNotBeEmptyTests
+public class ShouldNotHaveDuplicatesTests
 {
     [TestMethod]
-    public void WhenThereAreNoRegisteredServices_ReturnsMessages()
+    public void WhenThereAreDuplicateRegisteredServices_ReturnsMessages()
     {
         var sc = new ServiceCollection();
+        sc.AddTransient<ITestService, TestService>();
+        sc.AddTransient<ITestService, TestService>();
 
         var results = new Validator()
-            .With<ShouldNotBeEmpty>()
+            .With<ShouldNotHaveDuplicates>()
             .Validate(sc);
 
-        results.Single().Message.Should().Be("ServiceCollection should not be empty.");
+        results.Single().Message.Should().Be("ImplementationType 'Tests.Core.TestService' is registered for ServiceType 'Tests.Core.ITestService' 2 times.");
     }
     
     [TestMethod]
-    public void WhenThereAreRegisteredServices_ReturnsNoMessages()
+    public void WhenThereAreNoDuplicateRegisteredServices_ReturnsNoMessages()
     {
         var sc = new ServiceCollection();
         sc.AddTransient<ITestService, TestService>();
 
         var results = new Validator()
-            .With<ShouldNotBeEmpty>()
+            .With<ShouldNotHaveDuplicates>()
             .Validate(sc);
 
         results.Should().BeEmpty();

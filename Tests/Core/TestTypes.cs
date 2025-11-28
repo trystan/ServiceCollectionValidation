@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tests;
+namespace Tests.Core;
 
 public interface ITestService { }
 public class TestService : ITestService { }

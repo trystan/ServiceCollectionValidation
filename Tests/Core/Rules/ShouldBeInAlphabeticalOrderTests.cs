@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Tests.Rules;
+namespace Tests.Core.Rules;
 
 [TestClass]
 public class ShouldBeInAlphabeticalOrderTests

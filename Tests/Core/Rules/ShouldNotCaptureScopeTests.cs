@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Tests.Rules;
+namespace Tests.Core.Rules;
 
 [TestClass]
 public class ShouldNotCaptureScopeTests
@@ -22,7 +22,7 @@ public class ShouldNotCaptureScopeTests
             .With<ShouldNotCaptureScope>()
             .Validate(sc);
 
-        results.Single().Message.Should().Be("ServiceType 'Tests.TestParent' with singleton lifetime captures service 'Tests.ITestServiceA' with scoped lifetime.");
+        results.Single().Message.Should().Be("ServiceType 'Tests.Core.TestParent' with singleton lifetime captures service 'Tests.Core.ITestServiceA' with scoped lifetime.");
     }
     
     [TestMethod]

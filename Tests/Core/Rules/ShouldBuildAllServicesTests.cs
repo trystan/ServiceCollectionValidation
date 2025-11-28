@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Tests.Rules;
+namespace Tests.Core.Rules;
 
 [TestClass]
 public class ShouldBuildAllServicesTests
@@ -21,7 +21,7 @@ public class ShouldBuildAllServicesTests
             .With<ShouldBuildAllServices>()
             .Validate(sc);
 
-        results.Single().Message.Should().Be("System.InvalidOperationException: Unable to resolve service for type 'Tests.ITestServiceA' while attempting to activate 'Tests.TestParent'.");
+        results.Single().Message.Should().Be("System.InvalidOperationException: Unable to resolve service for type 'Tests.Core.ITestServiceA' while attempting to activate 'Tests.Core.TestParent'.");
     }
 
     [TestMethod]

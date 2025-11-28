@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCore\AspNetCore.csproj" />
     <ProjectReference Include="..\ServiceCollectionValidation\ServiceCollectionValidation.csproj" />
   </ItemGroup>
 

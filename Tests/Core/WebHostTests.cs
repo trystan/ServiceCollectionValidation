@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceCollectionValidation.Rules;
 using System.Linq;
 
-namespace Tests;
+namespace Tests.Core;
 
 [TestClass]
 public class WebHostTests
