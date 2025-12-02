@@ -1,15 +1,10 @@
-﻿using AspNetCore.Rules;
-using AwesomeAssertions;
+﻿using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceCollectionValidation;
+using ServiceCollectionValidation.AspNetCore.Rules;
 using ServiceCollectionValidation.Rules;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tests.Core;
 
 namespace Tests.AspNetCore.Rules;
 

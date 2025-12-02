@@ -1,12 +1,8 @@
-﻿using AspNetCore.Rules;
-using AwesomeAssertions;
+﻿using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceCollectionValidation.Rules;
-using System.Linq;
 
 namespace Tests.Core;
 

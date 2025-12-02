@@ -1,6 +1,5 @@
-﻿using AspNetCore.Rules;
-using ServiceCollectionValidation;
-namespace AspNetCore;
+﻿using ServiceCollectionValidation.AspNetCore.Rules;
+namespace ServiceCollectionValidation.AspNetCore;
 
 public static class ValidatorsExtensions
 {

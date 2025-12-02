@@ -1,7 +1,6 @@
 
 using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceCollectionValidation;
 using ServiceCollectionValidation.Rules;
