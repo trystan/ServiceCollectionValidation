@@ -49,7 +49,7 @@ public class Validators
 {
     public static Validators Predefined { get; } = new Validators();
 
-    public Validator Empty => new Validator();
+    public static Validator Empty => new Validator();
 
     public Validator Default = new Validator()
         .With<ShouldNotBeEmpty>()
@@ -68,7 +68,7 @@ public class Validators
 /// </remarks>
 public class Validator
 {
-    public List<IRule> Rules { get; private init;  } = new List<IRule>();
+    public List<IRule> Rules { get; private init; } = [];
 
     public Validator() { }
 
@@ -79,14 +79,14 @@ public class Validator
 
     public Validator With(params IRule[] rules) => new Validator(this.Rules.Concat(rules));
 
-    public Validator With(Validator other) => With(other.Rules.Where(r => !Rules.Contains(r)).ToArray());
+    public Validator With(Validator other) => With([.. other.Rules.Where(r => !Rules.Contains(r))]);
 
     public Validator With<T>()
         where T : IRule, new() => With(new T());
 
     public Validator Without(params IRule[] rules) => new Validator(this.Rules.Where(r => !rules.Contains(r)));
 
-    public Validator Without(Validator other) => Without(other.Rules.ToArray());
+    public Validator Without(Validator other) => Without([.. other.Rules]);
 
     public Validator Without<T>()
         where T : IRule, new() => new Validator(this.Rules.Where(r => r.GetType() != typeof(T)));
@@ -108,6 +108,6 @@ public class Validator
             rule.RunBeforeValidation(newServiceCollection);
         }
 
-        return Rules.SelectMany(r => r.Validate(newServiceCollection)).ToArray();
+        return [.. Rules.SelectMany(r => r.Validate(newServiceCollection))];
     }
 }

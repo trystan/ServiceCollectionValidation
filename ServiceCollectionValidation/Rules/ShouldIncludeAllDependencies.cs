@@ -45,18 +45,13 @@ public class ShouldIncludeAllDependenciesOptions : IEquatable<ShouldIncludeAllDe
 /// <remarks>
 /// This is included in the <c>Validators.Predefined.Default</c> validator.
 /// </remarks>
-public class ShouldIncludeAllDependencies : IRule, IEquatable<ShouldIncludeAllDependencies?>
+public class ShouldIncludeAllDependencies(ShouldIncludeAllDependenciesOptions options) : IRule, IEquatable<ShouldIncludeAllDependencies?>
 {
-    private readonly ShouldIncludeAllDependenciesOptions _options;
+    private readonly ShouldIncludeAllDependenciesOptions _options = options;
 
     public ShouldIncludeAllDependencies()
         : this(new ShouldIncludeAllDependenciesOptions())
     {
-    }
-
-    public ShouldIncludeAllDependencies(ShouldIncludeAllDependenciesOptions options)
-    {
-        _options = options;
     }
 
     public ShouldIncludeAllDependencies(Action<ShouldIncludeAllDependenciesOptions> configAction)
@@ -72,7 +67,7 @@ public class ShouldIncludeAllDependencies : IRule, IEquatable<ShouldIncludeAllDe
 
     private List<Result> CheckConstructors(IServiceCollection services, ServiceDescriptor descriptor)
     {
-        if (descriptor.ImplementationType == null) return new List<Result>();
+        if (descriptor.ImplementationType == null) return [];
 
         var totalResults = new List<Result>();
 
@@ -112,7 +107,7 @@ public class ShouldIncludeAllDependencies : IRule, IEquatable<ShouldIncludeAllDe
         return totalResults;
     }
 
-    private bool IsMatch(Type lookingFor, Type lookingAt)
+    private static bool IsMatch(Type lookingFor, Type lookingAt)
     {
         if (lookingFor == lookingAt) return true;
 

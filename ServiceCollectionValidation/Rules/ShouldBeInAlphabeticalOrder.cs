@@ -10,13 +10,13 @@ namespace ServiceCollectionValidation.Rules;
 /// </remarks>
 public record struct ShouldBeInAlphabeticalOrder : IRule
 {
-    public IEnumerable<Result> Validate(IServiceCollection services)
+    public readonly IEnumerable<Result> Validate(IServiceCollection services)
     {
         var types = services.Select(s => s.ServiceType);
         var firstOutOfOrder = types.Zip(types.OrderBy(t => t.Name)).FirstOrDefault(pair => pair.First != pair.Second);
 
         return firstOutOfOrder == default
-            ? Enumerable.Empty<Result>()
+            ? []
             : [new Result { Message = $"Services should be registered in alphabetical order but found '{firstOutOfOrder.First.Name}' instead of expected '{firstOutOfOrder.Second.Name}'." }];
     }
 }
