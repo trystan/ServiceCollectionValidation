@@ -32,11 +32,12 @@ public interface IRule
 }
 
 /// <summary>
-/// Something that should happen before validation begins. It takes a copy of the original service collection that you can add to.
+/// Something that should happen before validation begins. It takes a copy of the original service collection that you can add to and the validator.
 /// </summary>
-public interface IRunBeforeValidation : IRule
+public interface IRunBeforeValidation
 {
     void RunBeforeValidation(IServiceCollection services);
+    void RunBeforeValidation(IServiceCollection services, Validator validator) => RunBeforeValidation(services);
 }
 
 /// <summary>
@@ -68,28 +69,45 @@ public class Validators
 /// </remarks>
 public class Validator
 {
+    public List<IRunBeforeValidation> BeforeValidation { get; private init; } = [];
+
     public List<IRule> Rules { get; private init; } = [];
 
     public Validator() { }
 
-    public Validator(IEnumerable<IRule> rules)
+    public Validator(IEnumerable<IRule> rules, IEnumerable<IRunBeforeValidation> beforeValidation)
     {
         Rules.AddRange(rules);
+        BeforeValidation.AddRange(beforeValidation);
     }
 
-    public Validator With(params IRule[] rules) => new Validator(this.Rules.Concat(rules));
+    public Validator With(params IRule[] rules) => new Validator(this.Rules.Concat(rules), [.. this.BeforeValidation]);
 
-    public Validator With(Validator other) => With([.. other.Rules.Where(r => !Rules.Contains(r))]);
+    public Validator With(params IRunBeforeValidation[] beforeValidation) => new Validator([.. this.Rules], this.BeforeValidation.Concat(beforeValidation));
+
+    public Validator With(Validator other) => this
+        .With([.. other.Rules.Where(r => !Rules.Contains(r))])
+        .With([.. other.BeforeValidation.Where(r => !BeforeValidation.Contains(r))]);
 
     public Validator With<T>()
         where T : IRule, new() => With(new T());
 
-    public Validator Without(params IRule[] rules) => new Validator(this.Rules.Where(r => !rules.Contains(r)));
+    public Validator WithBeforeValidation<T>()
+        where T : IRunBeforeValidation, new() => With(new T());
 
-    public Validator Without(Validator other) => Without([.. other.Rules]);
+    public Validator Without(params IRule[] rules) => new Validator(this.Rules.Where(r => !rules.Contains(r)), [.. this.BeforeValidation]);
+
+    public Validator Without(params IRunBeforeValidation[] beforeValidation) => new Validator([.. this.Rules], this.BeforeValidation.Where(bv => beforeValidation.Contains(bv)));
+
+    public Validator Without(Validator other) => this
+        .Without([.. other.Rules])
+        .Without([.. other.BeforeValidation]);
 
     public Validator Without<T>()
-        where T : IRule, new() => new Validator(this.Rules.Where(r => r.GetType() != typeof(T)));
+        where T : IRule, new() => new Validator(this.Rules.Where(r => r.GetType() != typeof(T)), [.. this.BeforeValidation]);
+
+    public Validator WithoutBeforeValidation<T>()
+        where T : IRunBeforeValidation, new() => new Validator([.. this.Rules], this.BeforeValidation.Where(r => r.GetType() != typeof(T)));
 
     public IEnumerable<Result> Validate(IServiceCollection services)
     {
@@ -103,9 +121,9 @@ public class Validator
             newServiceCollection.Add(service);
         }
 
-        foreach (var rule in Rules.OfType<IRunBeforeValidation>())
+        foreach (var rule in BeforeValidation)
         {
-            rule.RunBeforeValidation(newServiceCollection);
+            rule.RunBeforeValidation(newServiceCollection, this);
         }
 
         return [.. Rules.SelectMany(r => r.Validate(newServiceCollection))];

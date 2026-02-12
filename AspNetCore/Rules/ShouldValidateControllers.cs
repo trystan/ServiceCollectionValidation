@@ -10,13 +10,8 @@ namespace ServiceCollectionValidation.AspNetCore.Rules;
 /// <remarks>
 /// This is included in the <c>Validators.Predefined.AspNetCore()</c> validator.
 /// </remarks>
-public class ShouldValidateControllers : IRule, IRunBeforeValidation
+public class ShouldValidateControllers : IRunBeforeValidation
 {
-    public IEnumerable<Result> Validate(IServiceCollection services)
-    {
-        return [];
-    }
-
     public void RunBeforeValidation(IServiceCollection services)
     {
         foreach (var controller in GetControllers())

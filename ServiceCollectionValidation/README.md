@@ -67,9 +67,29 @@ public class ShouldBeInAlphabeticalOrder : IRule
 }
 ```
 
+## Write new functionality to run before validation
+
+You can write your own functionality to run before validation.
+One use is to get all the AspNetCore controllers and add them to the service collection to verify them. This is part of the definition from `ServiceCollectionValidation.AspNetCore` package.
+
+```csharp
+public class ShouldValidateControllers : IRunBeforeValidation
+{
+    public void RunBeforeValidation(IServiceCollection services)
+    {
+        foreach (var controller in GetControllers())
+        {
+            services.TryAddTransient(controller);
+        }
+    }
+    
+    // ...
+}
+```
+
 ## Use them with a validator
 
-You can new up your own validator
+You can new up your own validator.
 
 ```csharp
 var validator = new Validator();
@@ -78,10 +98,11 @@ validator.Rules.Add(new ShouldBeInAlphabeticalOrder());
 var results = validator.Validate(services);
 ```
 
-Or you can create a validator by composing rules and validators using `With()` and `Without()`.
+Or you can create a validator by composing rules, before valitations, and validators using `With()` and `Without()`.
 
 ```csharp
 var validator = Validators.Predefined.Default
+  .WithBeforeValidation<CheckCustomServices>()
   .With<ShouldAlwaysImplementAnInterface>()
   .With(new ShouldBeConfiguredFor(CurrentEnvironment));
   .Without<ShouldBeInAlphabeticalOrder>()

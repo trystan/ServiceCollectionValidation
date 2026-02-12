@@ -37,7 +37,7 @@ public class ShouldValidateControllersTests
         var sc = new ServiceCollection();
 
         new Validator()
-            .With<ShouldValidateControllers>()
+            .WithBeforeValidation<ShouldValidateControllers>()
             .Validate(sc);
 
         sc.Should().BeEmpty();
@@ -48,10 +48,11 @@ public class ShouldValidateControllersTests
     {
         var sc = new ServiceCollection();
 
-        var results = new Validator()
-            .With<ShouldValidateControllers>()
-            .With<ShouldIncludeAllDependencies>()
-            .Validate(sc);
+        var validator = new Validator()
+            .WithBeforeValidation<ShouldValidateControllers>()
+            .With<ShouldIncludeAllDependencies>();
+
+        var results = validator.Validate(sc);
 
         results.Single().Message.Should().Be("ServiceType 'Tests.AspNetCore.TestController' requires service 'Tests.Core.ITestService service' but none are registered.");
     }
