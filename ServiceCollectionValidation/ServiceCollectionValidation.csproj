@@ -8,7 +8,7 @@
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ServiceCollectionValidation</Title>
-    <Version>1.7.0</Version>
+    <Version>1.8.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <Authors>Trystan Spangler</Authors>
     <Company></Company>
