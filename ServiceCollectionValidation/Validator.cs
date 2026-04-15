@@ -56,7 +56,8 @@ public class Validators
         .With<ShouldNotBeEmpty>()
         .With<ShouldNotHaveDuplicates>()
         .With<ShouldNotCaptureScope>()
-        .With<ShouldIncludeAllDependencies>();
+        .With<ShouldIncludeAllDependencies>()
+        .With<ShouldHaveImplementableTypes>();
 }
 
 /// <summary>

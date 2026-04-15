@@ -28,3 +28,9 @@ public class TestParentWithTwoConstructors : ITestService
 #pragma warning restore CS9113 // Parameter is unread.
 #pragma warning restore IDE0060 // Remove unused parameter
 
+public abstract class AbstractTestService : ITestService { }
+
+public class TestServiceWithPrivateConstructorOnly : ITestService
+{
+    private TestServiceWithPrivateConstructorOnly() { }
+}

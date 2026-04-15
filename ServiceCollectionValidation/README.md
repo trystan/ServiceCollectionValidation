@@ -186,3 +186,9 @@ This is included in the `Default` validator.
 Validates the exact same implementation and service pair aren't registered more than once.
 
 This is included in the `Default` validator.
+
+### ShouldHaveImplementableTypes
+
+Validates that every registered implementation type can actually be instantiated: not an interface, not abstract, and has at least one public constructor. Factory and instance registrations are skipped since the container does not construct them directly.
+
+This is included in the `Default` validator.
