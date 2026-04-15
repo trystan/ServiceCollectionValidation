@@ -113,7 +113,7 @@ public class ShouldIncludeAllDependencies(ShouldIncludeAllDependenciesOptions op
 
         // Handle ILogger<> style services
         if (lookingFor.IsGenericType && lookingAt.IsGenericType && lookingFor.GetGenericTypeDefinition() == lookingAt.GetGenericTypeDefinition()) return true;
-        
+
         return false;
     }
 

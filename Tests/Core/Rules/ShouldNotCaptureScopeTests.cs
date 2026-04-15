@@ -5,6 +5,7 @@ using ServiceCollectionValidation.Rules;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System;
 
 namespace Tests.Core.Rules;
 
@@ -51,5 +52,20 @@ public class ShouldNotCaptureScopeTests
             .Validate(sc);
 
         results.Should().BeEmpty();
+    }
+    
+    [TestMethod]
+    public void WhenSingletonCapturesScope_ServiceProviderThrowsWithScopeValidation()
+    {
+        var sc = new ServiceCollection();
+        sc.AddSingleton<ITestService, TestParent>();
+        sc.AddScoped<ITestServiceA, TestServiceA>();
+
+        // The ServiceProvider itself catches this when ValidateScopes is enabled
+        var act = () => sc.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true })
+            .GetRequiredService<ITestService>();
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("*cannot consume scoped service*");
     }
 }

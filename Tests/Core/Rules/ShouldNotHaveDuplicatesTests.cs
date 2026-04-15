@@ -37,4 +37,19 @@ public class ShouldNotHaveDuplicatesTests
 
         results.Should().BeEmpty();
     }
+    
+    [TestMethod]
+    public void WhenDuplicatesAreRegistered_ServiceProviderSilentlyResolvesLastRegistration()
+    {
+        var sc = new ServiceCollection();
+        sc.AddTransient<ITestService, TestService>();
+        sc.AddTransient<ITestService, TestService>();
+
+        var sp = sc.BuildServiceProvider();
+
+        // The ServiceProvider does not throw and duplicates are silently accepted.
+        // GetRequiredService returns only the last registration; the duplicate is invisible at runtime.
+        sp.GetRequiredService<ITestService>().Should().BeOfType<TestService>();
+        sp.GetServices<ITestService>().Should().HaveCount(2);
+    }
 }

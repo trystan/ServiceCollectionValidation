@@ -17,7 +17,7 @@ public enum Severity
 public class Result
 {
     public Severity Severity { get; init; } = Severity.Error;
-    required public string Message {  get; init; }
+    required public string Message { get; init; }
 }
 
 /// <summary>

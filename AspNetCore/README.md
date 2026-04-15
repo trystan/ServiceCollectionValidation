@@ -1,6 +1,6 @@
 # ServiceCollectionValidation.AspNetCore
 
-Rules for ServiceCollectionValidation specificly for AspNetCore projects.
+Rules for ServiceCollectionValidation specifically for AspNetCore projects.
 
 ## New validator
 

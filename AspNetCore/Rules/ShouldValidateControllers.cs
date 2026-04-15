@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace ServiceCollectionValidation.AspNetCore.Rules;
 
 /// <summary>
-/// This will scan all types in the current <c>AppDomain</c> that have <c>ControllerAttribute</c> but not <c>NonControllerAttribute</c> in their type heirarchy and validate them as though they were in the service collection.
+/// This will scan all types in the current <c>AppDomain</c> that have <c>ControllerAttribute</c> but not <c>NonControllerAttribute</c> in their type hierarchy and validate them as though they were in the service collection.
 /// </summary>
 /// <remarks>
 /// This is included in the <c>Validators.Predefined.AspNetCore()</c> validator.
@@ -34,7 +34,7 @@ public class ShouldValidateControllers : IRunBeforeValidation
             var doesImplementControllerAttribute = RecursiveAny(type, t => t.CustomAttributes.Any(a => a.AttributeType == controllerAttribute));
             if (!doesImplementControllerAttribute) continue;
 
-            var shouldIgnore = RecursiveAny(type, t => t.CustomAttributes.Any(a => a.AttributeType == nonControllerAttribute)); ;
+            var shouldIgnore = RecursiveAny(type, t => t.CustomAttributes.Any(a => a.AttributeType == nonControllerAttribute));
             if (shouldIgnore) continue;
             
             yield return type;

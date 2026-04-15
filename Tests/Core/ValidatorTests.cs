@@ -10,7 +10,7 @@ namespace Tests.Core;
 public class ValidatorTests
 {
     [TestMethod]
-    public void WhenAddingRules_PreservesTheOrigional()
+    public void WhenAddingRules_PreservesTheOriginal()
     {
         var first = new Validator();
         var second = first
@@ -21,7 +21,7 @@ public class ValidatorTests
     }
 
     [TestMethod]
-    public void WhenRemovingRules_PreservesTheOrigional()
+    public void WhenRemovingRules_PreservesTheOriginal()
     {
         var first = new Validator()
             .With<ShouldBeInAlphabeticalOrder>();

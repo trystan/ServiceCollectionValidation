@@ -98,7 +98,7 @@ validator.Rules.Add(new ShouldBeInAlphabeticalOrder());
 var results = validator.Validate(services);
 ```
 
-Or you can create a validator by composing rules, before valitations, and validators using `With()` and `Without()`.
+Or you can create a validator by composing rules, before validations, and validators using `With()` and `Without()`.
 
 ```csharp
 var validator = Validators.Predefined.Default
@@ -141,7 +141,7 @@ Then use it in any projects that reference that extension method.
 Validators.Predefined.MyCompanyValidator().Validate(services);
 ```
 
-The `Default` validator is defined like this
+The `Default` validator is defined like this:
 
 ```csharp
 public Validator Default = new Validator()
@@ -155,7 +155,7 @@ public Validator Default = new Validator()
 
 ### ShouldBeInAlphabeticalOrder
 
-Validates types are registererd in alphabeticcal order. Just a silly example.
+Validates types are registered in alphabetical order. Just a silly example.
 
 This is not included in the `Default` validator.
 

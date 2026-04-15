@@ -5,6 +5,7 @@ using ServiceCollectionValidation.Rules;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System;
 
 namespace Tests.Core.Rules;
 
@@ -25,7 +26,7 @@ public class ShouldBuildAllServicesTests
     }
 
     [TestMethod]
-    public void WhenDependencyHasDefafult_ReturnsNoMessages()
+    public void WhenDependencyHasDefault_ReturnsNoMessages()
     {
         var sc = new ServiceCollection();
         sc.AddSingleton<ITestService, TestParentWithDefaultChild>();
@@ -35,6 +36,23 @@ public class ShouldBuildAllServicesTests
             .Validate(sc);
 
         results.Should().BeEmpty();
+    }
+
+    [TestMethod]
+    public void WhenDependencyIsNotRegistered_ServiceProviderThrowsOnResolution()
+    {
+        var sc = new ServiceCollection();
+        sc.AddSingleton<ITestService, TestParent>();
+
+        // Without the validator catching this first, the ServiceProvider throws at resolution time.
+        var act = () =>
+        {
+            using var scope = sc.BuildServiceProvider().CreateScope();
+            scope.ServiceProvider.GetRequiredService<ITestService>();
+        };
+
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("*Unable to resolve service for type 'Tests.Core.ITestServiceA'*");
     }
 
     [TestMethod]
