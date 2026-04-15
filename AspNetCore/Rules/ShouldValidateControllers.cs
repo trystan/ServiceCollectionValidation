@@ -36,7 +36,7 @@ public class ShouldValidateControllers : IRunBeforeValidation
 
             var shouldIgnore = RecursiveAny(type, t => t.CustomAttributes.Any(a => a.AttributeType == nonControllerAttribute));
             if (shouldIgnore) continue;
-            
+
             yield return type;
         }
     }

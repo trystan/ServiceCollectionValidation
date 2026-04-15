@@ -22,7 +22,7 @@ public class ShouldNotBeEmptyTests
 
         results.Single().Message.Should().Be("ServiceCollection should not be empty.");
     }
-    
+
     [TestMethod]
     public void WhenThereAreRegisteredServices_ReturnsNoMessages()
     {

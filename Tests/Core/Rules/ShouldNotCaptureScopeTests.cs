@@ -25,7 +25,7 @@ public class ShouldNotCaptureScopeTests
 
         results.Single().Message.Should().Be("ServiceType 'Tests.Core.TestParent' with singleton lifetime captures service 'Tests.Core.ITestServiceA' with scoped lifetime.");
     }
-    
+
     [TestMethod]
     public void WhenSingletonsDependOnSingletonServices_ReturnsNoMessages()
     {
@@ -53,7 +53,7 @@ public class ShouldNotCaptureScopeTests
 
         results.Should().BeEmpty();
     }
-    
+
     [TestMethod]
     public void WhenSingletonCapturesScope_ServiceProviderThrowsWithScopeValidation()
     {

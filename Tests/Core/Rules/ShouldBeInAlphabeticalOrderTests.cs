@@ -25,7 +25,7 @@ public class ShouldBeInAlphabeticalOrderTests
 
         results.Single().Message.Should().Be("Services should be registered in alphabetical order but found 'ITestServiceA' instead of expected 'ITestService'.");
     }
-    
+
     [TestMethod]
     public void WhenRegisteredServicesAreInOrder_ReturnsNoMessages()
     {

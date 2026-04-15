@@ -147,7 +147,7 @@ public class ShouldIncludeAllDependenciesTests
 
         results.Single().Message.Should().Be("ServiceType 'Tests.Core.ServiceProviderUser' requires service 'System.IServiceProvider example' but none are registered.");
     }
-    
+
     [TestMethod]
     public void WhenDependencyIsNotRegistered_ServiceProviderThrowsOnResolution()
     {

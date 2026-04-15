@@ -24,7 +24,7 @@ public class ShouldNotHaveDuplicatesTests
 
         results.Single().Message.Should().Be("ImplementationType 'Tests.Core.TestService' is registered for ServiceType 'Tests.Core.ITestService' 2 times.");
     }
-    
+
     [TestMethod]
     public void WhenThereAreNoDuplicateRegisteredServices_ReturnsNoMessages()
     {
@@ -37,7 +37,7 @@ public class ShouldNotHaveDuplicatesTests
 
         results.Should().BeEmpty();
     }
-    
+
     [TestMethod]
     public void WhenDuplicatesAreRegistered_ServiceProviderSilentlyResolvesLastRegistration()
     {
