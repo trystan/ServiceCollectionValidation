@@ -192,3 +192,18 @@ This is included in the `Default` validator.
 Validates that every registered implementation type can actually be instantiated: not an interface, not abstract, and has at least one public constructor. Factory and instance registrations are skipped since the container does not construct them directly.
 
 This is included in the `Default` validator.
+
+### ShouldIncludeConcreteImplementationTypes
+
+A helper validator that takes a type and verifies every loaded concreate type that implements the target is registered in the service collection.
+
+Example:
+
+```csharp
+Validators.Predefined.Default
+    .With<ShouldIncludeConcreteImplementationTypes<IMyValidator>>()
+```
+
+This will verify that every type that implements `IMyValidator` is registered in the service collection.
+
+This is not included in the `Default` validator since it's meant to be used with your types.
