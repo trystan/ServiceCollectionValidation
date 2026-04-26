@@ -12,6 +12,17 @@ namespace ServiceCollectionValidation.AspNetCore.Rules;
 /// </remarks>
 public class ShouldValidateControllers : IRunBeforeValidation
 {
+    private readonly TypeFilterOptions? options;
+
+    public ShouldValidateControllers()
+    {
+    }
+
+    public ShouldValidateControllers(TypeFilterOptions? options = null)
+    {
+        this.options = options;
+    }
+
     public void RunBeforeValidation(IServiceCollection services)
     {
         foreach (var controller in GetControllers())
@@ -20,12 +31,15 @@ public class ShouldValidateControllers : IRunBeforeValidation
         }
     }
 
-    public static IEnumerable<Type> GetControllers()
+    public IEnumerable<Type> GetControllers()
     {
         var controllerAttribute = typeof(ControllerAttribute);
         var nonControllerAttribute = typeof(NonControllerAttribute);
 
-        foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()))
+        var assemblies = this.options?.Assemblies ?? AppDomain.CurrentDomain.GetAssemblies();
+        var typeFilter = this.options?.TypeFilter ?? ((_) => true);
+
+        foreach (var type in assemblies.SelectMany(a => a.GetTypes()).Where(typeFilter))
         {
             if (type.IsAbstract) continue;
 

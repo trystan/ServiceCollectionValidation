@@ -14,7 +14,7 @@ public class ShouldValidateControllersTests
     [TestMethod]
     public void DetectsTypesWithControllerAttribute()
     {
-        var controllers = ShouldValidateControllers.GetControllers();
+        var controllers = new ShouldValidateControllers().GetControllers();
 
         var expectedController = typeof(TestController);
 
@@ -24,7 +24,7 @@ public class ShouldValidateControllersTests
     [TestMethod]
     public void IgnoresTypesWithNonControllerAttribute()
     {
-        var controllers = ShouldValidateControllers.GetControllers();
+        var controllers = new ShouldValidateControllers().GetControllers();
 
         var expectedController = typeof(TestNonController);
 

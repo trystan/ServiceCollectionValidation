@@ -96,6 +96,9 @@ public class Validator
     public Validator WithBeforeValidation<T>()
         where T : IRunBeforeValidation, new() => With(new T());
 
+    public Validator WithBeforeValidation<T>(T validation)
+        where T : IRunBeforeValidation, new() => With(validation);
+
     public Validator Without(params IRule[] rules) => new Validator(this.Rules.Where(r => !rules.Contains(r)), [.. this.BeforeValidation]);
 
     public Validator Without(params IRunBeforeValidation[] beforeValidation) => new Validator([.. this.Rules], this.BeforeValidation.Where(bv => beforeValidation.Contains(bv)));
