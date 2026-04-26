@@ -148,7 +148,8 @@ public Validator Default = new Validator()
     .With<ShouldNotBeEmpty>()
     .With<ShouldNotHaveDuplicates>()
     .With<ShouldNotCaptureScope>()
-    .With<ShouldIncludeAllDependencies>();
+    .With<ShouldIncludeAllDependencies>()
+    .With<ShouldHaveImplementableTypes>();
 ```
 
 ## Existing rules
